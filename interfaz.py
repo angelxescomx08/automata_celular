@@ -1,4 +1,4 @@
-from tkinter import Tk,Menu,ALL,Label,Entry,Button
+from tkinter import Tk,Menu,Label,Entry,Button
 from automata import crear_matriz_hilos
 from tkinter.filedialog import askopenfilename,asksaveasfile
 from archivo import cargar_archivo,guardar_archivo,binarizar
@@ -9,6 +9,7 @@ from functools import partial
 import random
 from matplotlib.colors import LinearSegmentedColormap
 from tkinter.colorchooser import askcolor
+from os.path import exists
 
 class Ventana():
     def __init__(self):
@@ -52,6 +53,15 @@ class Ventana():
         self.toolbar = NavigationToolbar2Tk(self.canvas,self.ventana) 
         self.toolbar.update()  
         self.canvas.get_tk_widget().pack()
+
+        existe = exists('uno_en_medio.txt')
+        if existe:
+            especificaciones=cargar_archivo('uno_en_medio.txt')
+            self.matriz = crear_matriz_hilos(especificaciones[1],especificaciones[0],especificaciones[2])
+            self.pintar(self.matriz)
+            self.iteraciones = especificaciones[0]
+            self.r = especificaciones[1]
+            self.inicial = especificaciones[2]
     
     def cambiar_color_cero(self):
         self.color_cero = askcolor()[1]
@@ -78,7 +88,7 @@ class Ventana():
         Button(ventana, text='Aceptar', command=partial(self.aleatorio,ventana,i,c,er,p1)).pack()
         ventana.title('Automata celular')
         ventana.geometry("250x200")
-        ventana.eval('tk::PlaceWindow %s center' % ventana.winfo_pathname(ventana.winfo_id()))
+        #ventana.eval('tk::PlaceWindow %s center' % ventana.winfo_pathname(ventana.winfo_id()))
         ventana.resizable(False,False)
 
     def aleatorio(self,ventana,i,c,er,p1):
@@ -149,12 +159,13 @@ class Ventana():
 
     def cargar_archivo(self):
         archivo = askopenfilename()
-        especificaciones=cargar_archivo(archivo)
-        self.matriz = crear_matriz_hilos(especificaciones[1],especificaciones[0],especificaciones[2])
-        self.pintar(self.matriz)
-        self.iteraciones = especificaciones[0]
-        self.r = especificaciones[1]
-        self.inicial = especificaciones[2]
+        if archivo:
+            especificaciones=cargar_archivo(archivo)
+            self.matriz = crear_matriz_hilos(especificaciones[1],especificaciones[0],especificaciones[2])
+            self.pintar(self.matriz)
+            self.iteraciones = especificaciones[0]
+            self.r = especificaciones[1]
+            self.inicial = especificaciones[2]
 
     def guardar_archivo(self):
         archivo = asksaveasfile(mode='w', defaultextension=".txt")
@@ -172,7 +183,7 @@ class Ventana():
     def mostrar(self):
         self.ventana.title('Automata celular')
         self.ventana.configure(width=800,height=800)
-        self.ventana.eval('tk::PlaceWindow %s center' % self.ventana.winfo_pathname(self.ventana.winfo_id()))
+        #self.ventana.eval('tk::PlaceWindow %s center' % self.ventana.winfo_pathname(self.ventana.winfo_id()))
         self.ventana.resizable(False,False)
         self.ventana.mainloop()
 
