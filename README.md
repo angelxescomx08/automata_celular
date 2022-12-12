@@ -17,3 +17,10 @@ Para correr el proyecto ejecutaremos la siguiente linea en nuestra terminal:
 ```bash
 python interfaz.py
 ```
+
+## Archivos para seer cargados
+
+El programa puede cargar archivos ".txt" que generan un autómata celular, dichos archivos contienen 3 lineas.
+1. La primera linea representa el número dee iteraciones (el alto del autómata).
+2. La segunda linea representa la regla a utilizar hasta 255.
+3. La tercera linea representa la configuración inicial.
